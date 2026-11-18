@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lớp học vui vẻ – Tích điểm thi đua</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff4e6;--card:#fff;--ink:#4a3b5c;--soft:#8a7a9b;--pri:#ff8fab;--ok:#5ed3a0;--bad:#ff9e7a;--line:#ffe0c2;--shadow:0 6px 0 rgba(74,59,92,.08);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a2237;--card:#3a3049;--ink:#fdf0ff;--soft:#c3b3d6;--line:#4d4160;--shadow:0 6px 0 rgba(0,0,0,.25)}}
+:root[data-theme="dark"]{--bg:#2a2237;--card:#3a3049;--ink:#fdf0ff;--soft:#c3b3d6;--line:#4d4160;--shadow:0 6px 0 rgba(0,0,0,.25)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Nunito',system-ui,sans-serif;font-weight:700;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+h1{margin:0;font-size:clamp(22px,4vw,32px);font-weight:900}
+h1 input{font:inherit;color:inherit;background:transparent;border:2px dashed transparent;border-radius:14px;padding:2px 8px;width:min(70vw,420px)}
+h1 input:hover,h1 input:focus{border-color:var(--pri);outline:none}
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;cursor:pointer;border:0;border-radius:999px;padding:9px 16px;background:var(--card);color:var(--ink);box-shadow:var(--shadow);transition:transform .15s}
+button:hover{transform:translateY(-2px)}button:active{transform:translateY(2px)}
+button.pri{background:var(--pri);color:#fff}
+.top{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:16px}
+.class-card{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,#ffc6d9,#ffe3a3);color:#4a3b5c;border-radius:26px;padding:14px 20px;box-shadow:var(--shadow);cursor:pointer}
+.class-card .big{font-size:44px}.class-card b{font-size:30px;font-weight:900}
+.class-card small{display:block;opacity:.8}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.stu{position:relative;background:var(--card);border-radius:28px;padding:16px 10px 14px;text-align:center;box-shadow:var(--shadow);cursor:pointer;border:3px solid transparent;transition:transform .15s}
+.stu:hover{transform:translateY(-4px) rotate(-1deg);border-color:var(--c)}
+.av{width:78px;height:78px;margin:0 auto 6px;border-radius:50%;display:grid;place-items:center;font-size:46px;background:var(--c)}
+.nm{font-size:16px;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pts{display:inline-block;margin-top:6px;min-width:46px;padding:2px 12px;border-radius:999px;background:var(--ok);color:#fff;font-size:20px;font-weight:900}
+.pts.neg{background:var(--bad)}
+.rank{position:absolute;top:8px;left:10px;font-size:20px}
+.float{position:fixed;z-index:60;font-size:30px;font-weight:900;pointer-events:none;animation:up 1s ease-out forwards}
+@keyframes up{from{opacity:1;transform:translateY(0) scale(.8)}to{opacity:0;transform:translateY(-90px) scale(1.5)}}
+.modal{position:fixed;inset:0;background:rgba(40,25,60,.5);display:none;align-items:center;justify-content:center;padding:14px;z-index:50}
+.modal.on{display:flex}
+.box{background:var(--card);border-radius:30px;padding:20px;width:min(560px,100%);max-height:90vh;overflow:auto}
+.box h2{margin:0 0 4px;font-size:24px;text-align:center}
+.sub{text-align:center;color:var(--soft);margin-bottom:12px}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin:8px 0}
+.beh{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border-radius:22px;background:var(--bg);border:2px solid var(--line);box-shadow:none}
+.beh span{font-size:30px}.beh em{font-style:normal;font-weight:900}
+.beh.p em{color:var(--ok)}.beh.n em{color:var(--bad)}
+.row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+input.t,textarea.t{font:inherit;width:100%;padding:10px 14px;border-radius:16px;border:2px solid var(--line);background:var(--bg);color:var(--ink)}
+textarea.t{min-height:140px}
+.emo{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0}
+.emo button{font-size:26px;padding:6px 10px}
+.empty{text-align:center;padding:40px;color:var(--soft);font-size:18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>🌈 <input id="cname" aria-label="Tên lớp" maxlength="40"></h1>
+  <div class="tools">
+    <button class="pri" onclick="openAdd()">➕ Thêm học sinh</button>
+    <button onclick="pick()">🎲 Gọi ngẫu nhiên</button>
+    <button id="sortBtn" onclick="toggleSort()">🏆 Xếp hạng</button>
+    <button onclick="openMenu()">⚙️ Khác</button>
+  </div>
+</header>
+<div class="top">
+  <div class="class-card" onclick="openAward(null)" title="Cộng điểm cho cả lớp">
+    <div class="big">🏫</div>
+    <div><b id="total">0</b> điểm cả lớp<small id="cnt"></small><small>Bấm vào đây để thưởng cả lớp ✨</small></div>
+  </div>
+</div>
+<div id="grid" class="grid"></div>
+</div>
+
+<div class="modal" id="modal"><div class="box" id="box"></div></div>
+
+<script>
+const COLORS=['#ffd6e0','#ffe8b8','#d4f1c5','#cdeaff','#e6d4ff','#ffd9c7','#c9f4ee'];
+const AVS=['🐶','🐱','🐰','🦊','🐻','🐼','🐨','🐯','🦁','🐮','🐷','🐸','🐵','🐔','🐧','🦄','🐙','🦋','🐢','🐳','🦉','🐝','🐞','🦖'];
+const DEF_BEH=[{e:'✋',n:'Phát biểu',p:1},{e:'📚',n:'Chăm chỉ',p:1},{e:'🤝',n:'Giúp đỡ bạn',p:2},{e:'⭐',n:'Làm bài tốt',p:2},{e:'⏰',n:'Đúng giờ',p:1},{e:'🧹',n:'Giữ vệ sinh',p:1},{e:'💬',n:'Nói chuyện',p:-1},{e:'📝',n:'Quên bài',p:-1},{e:'🏃',n:'Đi muộn',p:-1}];
+const KEY='tich-diem-lop-v1';
+let S={name:'Lớp 5A – Tích điểm vui vẻ',students:[],beh:DEF_BEH,sort:false};
+try{const r=localStorage.getItem(KEY);if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
+function addStu(n){S.students.push({id:uid(),name:n,av:AVS[Math.floor(Math.random()*AVS.length)],pts:0})}
+function render(){
+  $('cname').value=S.name;
+  let list=S.students.map((s,i)=>({s,i}));
+  if(S.sort)list.sort((a,b)=>b.s.pts-a.s.pts);
+  $('sortBtn').textContent=S.sort?'🔤 Theo danh sách':'🏆 Xếp hạng';
+  $('total').textContent=S.students.reduce((a,s)=>a+s.pts,0);
+  $('cnt').textContent=S.students.length+' học sinh';
+  $('grid').innerHTML=list.length?list.map(({s,i},k)=>`<div class="stu" style="--c:${COLORS[i%COLORS.length]}" onclick="openAward('${s.id}',event)">${S.sort&&k<3?`<span class="rank">${['🥇','🥈','🥉'][k]}</span>`:''}<div class="av">${s.av}</div><div class="nm">${esc(s.name)}</div><span class="pts ${s.pts<0?'neg':''}">${s.pts}</span></div>`).join(''):'<div class="empty">Chưa có học sinh nào 🌱<br>Bấm “Thêm học sinh” để bắt đầu nhé!</div>';
+}
+function show(h){$('box').innerHTML=h;$('modal').classList.add('on')}
+function hide(){$('modal').classList.remove('on')}
+$('modal').addEventListener('click',e=>{if(e.target.id==='modal')hide()});
+$('cname').addEventListener('input',e=>{S.name=e.target.value;save()});
+
+function pop(txt,good,ev){
+  const d=document.createElement('div');d.className='float';d.textContent=txt;d.style.color=good?'#2fb985':'#ff7a4d';
+  d.style.left=(ev?ev.clientX:innerWidth/2)-20+'px';d.style.top=(ev?ev.clientY:innerHeight/2)+'px';
+  document.body.appendChild(d);setTimeout(()=>d.remove(),1000);
+}
+function openAward(id){
+  const s=id?S.students.find(x=>x.id===id):null;
+  const btn=(b,i)=>`<button class="beh ${b.p>0?'p':'n'}" onclick="give('${id||''}',${b.p},event)"><span>${b.e}</span>${esc(b.n)}<em>${b.p>0?'+':''}${b.p}</em></button>`;
+  const pos=S.beh.filter(b=>b.p>0),neg=S.beh.filter(b=>b.p<0);
+  show(`<h2>${s?s.av+' '+esc(s.name):'🏫 Cả lớp'}</h2><div class="sub">${s?'Đang có '+s.pts+' điểm':'Thưởng cho tất cả học sinh'}</div>
+  <div class="bgrid">${pos.map(btn).join('')}</div><div class="bgrid">${neg.map(btn).join('')}</div>
+  <div class="row"><input class="t" id="cp" type="number" placeholder="Điểm tùy chọn (vd: 5 hoặc -2)" style="max-width:260px"><button class="pri" onclick="give('${id||''}',+$('cp').value||0,event)">Áp dụng</button></div>
+  <div class="row">${s?`<button onclick="openEdit('${s.id}')">✏️ Sửa tên / avatar</button>`:''}<button onclick="hide()">Đóng</button></div>`);
+}
+function give(id,p,ev){
+  if(!p)return;
+  (id?S.students.filter(s=>s.id===id):S.students).forEach(s=>s.pts+=p);
+  save();render();pop((p>0?'+':'')+p+(p>0?' 🎉':' 💧'),p>0,ev);
+  if(id)hide();
+}
+function openAdd(){
+  show(`<h2>➕ Thêm học sinh</h2><div class="sub">Mỗi dòng là một tên – dán cả danh sách lớp cũng được!</div>
+  <textarea class="t" id="names" placeholder="Nguyễn Văn An&#10;Trần Thị Bình&#10;Lê Minh Châu"></textarea>
+  <div class="row"><button class="pri" onclick="doAdd()">Thêm vào lớp</button><button onclick="hide()">Hủy</button></div>`);
+}
+function doAdd(){
+  $('names').value.split('\n').map(x=>x.trim()).filter(Boolean).forEach(addStu);
+  save();render();hide();
+}
+let editAv='';
+function openEdit(id){
+  const s=S.students.find(x=>x.id===id);editAv=s.av;
+  show(`<h2>✏️ Sửa học sinh</h2><input class="t" id="en" value="${esc(s.name)}" maxlength="30">
+  <div class="emo">${AVS.map(a=>`<button onclick="editAv='${a}';this.parentNode.querySelectorAll('button').forEach(b=>b.style.background='');this.style.background='var(--pri)'" ${a===s.av?'style="background:var(--pri)"':''}>${a}</button>`).join('')}</div>
+  <div class="row"><button class="pri" onclick="saveEdit('${id}')">Lưu</button><button onclick="if(confirm('Xóa học sinh này?')){S.students=S.students.filter(x=>x.id!=='${id}');save();render();hide()}">🗑️ Xóa</button><button onclick="hide()">Hủy</button></div>`);
+}
+function saveEdit(id){const s=S.students.find(x=>x.id===id);s.name=$('en').value.trim()||s.name;s.av=editAv;save();render();hide()}
+function pick(){
+  if(!S.students.length)return;
+  const s=S.students[Math.floor(Math.random()*S.students.length)];
+  show(`<h2>🎲 Mời bạn…</h2><div class="stu" style="--c:#ffe8b8;cursor:default;max-width:220px;margin:12px auto"><div class="av" style="width:110px;height:110px;font-size:70px;background:#ffe8b8">${s.av}</div><div class="nm" style="font-size:22px">${esc(s.name)}</div></div>
+  <div class="row"><button class="pri" onclick="pick()">Gọi bạn khác</button><button onclick="openAward('${s.id}')">Cho điểm</button><button onclick="hide()">Đóng</button></div>`);
+}
+function toggleSort(){S.sort=!S.sort;save();render()}
+function openMenu(){
+  show(`<h2>⚙️ Tùy chọn</h2><div class="row" style="flex-direction:column;align-items:stretch">
+  <button onclick="openBeh()">🏷️ Chỉnh danh sách hành vi</button>
+  <button onclick="exp()">💾 Sao lưu (tải file)</button>
+  <button onclick="$('imp').click()">📂 Khôi phục từ file</button>
+  <button onclick="if(confirm('Đặt điểm của tất cả học sinh về 0?')){S.students.forEach(s=>s.pts=0);save();render();hide()}">🔄 Đặt lại điểm về 0</button>
+  <button onclick="if(confirm('Xóa toàn bộ dữ liệu?')){S.students=[];save();render();hide()}">🗑️ Xóa toàn bộ học sinh</button>
+  <button onclick="hide()">Đóng</button></div><input type="file" id="imp" accept=".json" hidden onchange="imp(this)">
+  <div class="sub" style="margin-top:10px">Dữ liệu lưu trên trình duyệt này. Nhớ sao lưu định kỳ nhé!</div>`);
+}
+function openBeh(){
+  show(`<h2>🏷️ Hành vi</h2><div class="sub">Mỗi dòng: emoji, tên, điểm (cách nhau bằng dấu |)</div>
+  <textarea class="t" id="bt">${S.beh.map(b=>`${b.e}|${b.n}|${b.p}`).join('\n')}</textarea>
+  <div class="row"><button class="pri" onclick="saveBeh()">Lưu</button><button onclick="hide()">Hủy</button></div>`);
+}
+function saveBeh(){
+  const b=$('bt').value.split('\n').map(l=>l.split('|').map(x=>x.trim())).filter(a=>a.length>=3&&+a[2]).map(a=>({e:a[0],n:a[1],p:+a[2]}));
+  if(b.length){S.beh=b;save()}hide();
+}
+function exp(){
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));
+  a.download='tich-diem-lop.json';a.click();
+}
+function imp(inp){
+  const f=inp.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{S=Object.assign(S,JSON.parse(r.result));save();render();hide()}catch(e){alert('File không hợp lệ')}};r.readAsText(f);
+}
+if(!S.students.length&&!localStorage.getItem(KEY+'-seen')){['An','Bình','Chi','Dũng','Em'].forEach(addStu);try{localStorage.setItem(KEY+'-seen','1')}catch(e){}}
+render();
+</script>
+</body>
+</html>
